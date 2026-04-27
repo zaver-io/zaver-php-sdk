@@ -22,22 +22,30 @@ class Checkout extends Base {
 	 * Create a payment using a `PaymentCreationRequest` as the message body. In return, you get a `PaymentStatusResponse`.
 	 */
 	public function createPayment(PaymentCreationRequest $request): PaymentStatusResponse {
-		$response = $this->client->post('/payments/checkout/v1', $request);
+		$response = $this->client->post('/payments/link/v2', $request);
+		return new PaymentStatusResponse($response);
+	}
+
+	/**
+	 * Capture a payment using a previously created `paymentId` and a `PaymentCaptureRequest` as the message body. In return, you get a `PaymentStatusResponse`.
+	 */
+	public function capturePayment(string $paymentId, PaymentCaptureRequest $request): PaymentStatusResponse {
+		$response = $this->client->post("/payments/link/v2/$paymentId/capture", $request);
 
 		return new PaymentStatusResponse($response);
 	}
 
 	/**
-	 * Capture a payment using a previously created `paymentId` and a `PaymentCaptureRequest` as the message body. In return, you get a `PaymentCaptureResponse`.
+	 * Cancel a payment using a previously created `paymentId`. In return, you get a `PaymentStatusResponse`.
 	 */
-	public function capturePayment(string $paymentId, PaymentCaptureRequest $request): PaymentCaptureResponse {
-		$response = $this->client->post("/payments/checkout/v1/$paymentId/capture", $request);
+	public function cancelPayment(string $paymentId): PaymentStatusResponse {
+		$response = $this->client->post("/payments/link/v2/$paymentId/cancel", []);
 
-		return new PaymentCaptureResponse($response);
+		return new PaymentStatusResponse($response);
 	}
 
 	public function getPaymentStatus(string $paymentId): PaymentStatusResponse {
-		$response = $this->client->get("/payments/checkout/v1/$paymentId");
+		$response = $this->client->get("/payments/link/v2/$paymentId");
 
 		return new PaymentStatusResponse($response);
 	}
@@ -46,13 +54,13 @@ class Checkout extends Base {
 		$data = $request->getData();
 		$query = !empty($data) ? '?' . http_build_query($data) : '';
 
-		$response = $this->client->get("/payments/checkout/paymentmethods/v1$query");
+		$response = $this->client->get("/payments/link/v2/paymentmethods/$query");
 
 		return new PaymentMethodsResponse($response);
 	}
 
 	public function updatePayment(string $paymentId, PaymentUpdateRequest $request): PaymentStatusResponse {
-		$response = $this->client->patch("/payments/checkout/v1/$paymentId", $request);
+		$response = $this->client->patch("/payments/link/v2/$paymentId", $request);
 
 		return new PaymentStatusResponse($response);
 	}
@@ -74,7 +82,7 @@ class Checkout extends Base {
 			if(is_null($content)) {
 				$content = file_get_contents('php://input');
 			}
-			
+
 			$data = json_decode($content, true, 10, JSON_THROW_ON_ERROR);
 		}
 		catch(Exception $e) {

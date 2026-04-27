@@ -124,11 +124,12 @@ class LineItem extends DataObject {
 	/**
 	 * An associative array of merchant-defined key-value pairs. These are returned with the Payment Status Response.
 	 * A Maximum of 20 pairs is allowed, each key and value with a maximum length of 200 characters.
+	 *
+	 * @deprecated Use `lineItemMetadata` instead, deprecated since 2.0.0
 	 */
 	public function setMerchantMetadata(array $merchantMetadata): self {
-		$this->data['merchantMetadata'] = $merchantMetadata;
-
-		return $this;
+		error_log('Deprecated method `Zaver\SDK\Object\LineItem::setMerchantMetadata` called. Use `Zaver\SDK\Object\LineItem::setLineItemMetadata` instead. Deprecated since version 2.0.0');
+		return $this->setLineItemMetadata($merchantMetadata);
 	}
 
 	/**
@@ -136,6 +137,16 @@ class LineItem extends DataObject {
 	 */
 	public function setQuantityUnit(string $quantityUnit): self {
 		$this->data['quantityUnit'] = $quantityUnit;
+
+		return $this;
+	}
+
+	/**
+	 * An associative array of merchant-defined key-value pairs. These are returned with the Payment Status Response.
+	 * A Maximum of 20 pairs is allowed, each key and value with a maximum length of 200 characters.
+	 */
+	public function setLineItemMetadata(array $lineItemMetadata): self {
+		$this->data['lineItemMetadata'] = $lineItemMetadata;
 
 		return $this;
 	}

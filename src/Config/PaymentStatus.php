@@ -16,4 +16,7 @@ class PaymentStatus {
 
 	/** An error occurred. The response will contain an array of errors with more information. */
 	const ERROR = 'ERROR';
+
+	/** The payment is pending confirmation */
+	const PENDING_CONFIRMATION = 'PENDING_CONFIRMATION';
 }

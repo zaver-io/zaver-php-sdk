@@ -6,11 +6,12 @@
     "homepage": "https://github.com/zaver-io/zaver-php-sdk",
     "readme": "README.md",
     "license": "MIT",
+    "version": "3.0.0",
     "authors": [
         {
-            "name": "Webbmaffian",
-            "email": "info@webbmaffian.se",
-            "homepage": "https://www.webbmaffian.se",
+            "name": "Krokedil",
+            "email": "info@krokedil.se",
+            "homepage": "https://www.krokedil.com",
             "role": "Developer"
         },
         {

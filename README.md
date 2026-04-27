@@ -1,5 +1,5 @@
 # Zaver PHP SDK
-This is the officially supported PHP SDK for [Zaver Checkout](https://www.zaver.io/), developed as a Composer package by [The Web Mafia](https://www.webbmaffian.se/).
+This is the officially supported PHP SDK for [Zaver Checkout](https://www.zaver.io/), developed as a Composer package by [Krokedil](https://www.krokedil.com/).
 
 ## Requirements
 - PHP 7.4+
@@ -15,10 +15,15 @@ composer require zaver/sdk
 All classes and methods are properly type-hinted with complementary PHPDoc - please see [the examples](#examples) on this page, and read [the API documentation](https://api-docs.zaver.se/v-1-2-0/checkout.html) for further details.
 
 ## Examples
-- [Initialize payment](#initialize-payment)
-- [Receive payment callback](#receive-payment-callback)
-- [Do a refund](#do-a-refund)
-- [Receive refund callback](#receive-refund-callback-eg-after-refund-approval)
+- [Zaver PHP SDK](#zaver-php-sdk)
+  - [Requirements](#requirements)
+  - [Installation](#installation)
+  - [Usage](#usage)
+  - [Examples](#examples)
+    - [Initialize payment](#initialize-payment)
+    - [Receive payment callback](#receive-payment-callback)
+    - [Do a refund](#do-a-refund)
+    - [Receive refund callback (e.g. after refund approval)](#receive-refund-callback-eg-after-refund-approval)
 
 ### Initialize payment
 ```php

@@ -24,7 +24,7 @@ class PaymentStatusResponse extends DataObject {
 
 	/**
 	 * The URL used for redirecting the user to the external checkout
-	 * @return String The redirect URL
+	 * @return string The redirect URL
 	 */
 	public function getPaymentLink(): string {
 		return $this->data['paymentLink'] ?? '';
@@ -95,7 +95,8 @@ class PaymentStatusResponse extends DataObject {
 	 * An associative array of merchant-defined key-value pairs. These are set at payment creation.
 	 */
 	public function getMerchantMetadata(): array {
-		return $this->data['merchantMetadata'] ?? [];
+		error_log('Deprecated method `Zaver\SDK\Object\PaymentStatusResponse::getMerchantMetadata` called. Use `Zaver\SDK\Object\PaymentStatusResponse::getPaymentMetadata` instead. Deprecated since version 2.0.0');
+		return $this->getPaymentMetadata();
 	}
 
 	/**
@@ -128,5 +129,31 @@ class PaymentStatusResponse extends DataObject {
 		}
 
 		return null;
+	}
+
+	/**
+	 * The allowed payment operations for the payment.
+	 * @return AllowedPaymentOperations|null
+	 */
+	public function getAllowedPaymentOperations(): ?AllowedPaymentOperations {
+		if(isset($this->data['allowedPaymentOperations'])) {
+			return AllowedPaymentOperations::create($this->data['allowedPaymentOperations']);
+		}
+		return null;
+	}
+
+	/**
+	 * The payment idempotency key.
+	 * @return string
+	 */
+	public function getIdempotencyKey(): string {
+		return $this->data['idempotencyKey'] ?? '';
+	}
+
+	/**
+	 * An associative array of merchant-defined key-value pairs. These are set at payment creation.
+	 */
+	public function getPaymentMetadata(): array {
+		return $this->data['paymentMetadata'] ?? [];
 	}
 }

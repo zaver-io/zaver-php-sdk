@@ -7,7 +7,7 @@ use Zaver\SDK\Utils\DataObject;
 
 /**
  * The merchant customizations options contains options used to customize a new payment request.
- * 
+ *
  * @method string getHideInstallmentOptions()						Ether true or false. If true, the Zaver checkout will not show any installment options during settlement.
  * @method string getSalespersonUsername()							The username (=email) of the Zaver for Business user that creates or updates the payment request. This will be mandatory for some merchants.
  * @method string getCaptureMethod()								Which method should be used to capture the payment. If not set, defaults to immediate.
@@ -15,22 +15,30 @@ use Zaver\SDK\Utils\DataObject;
  * @method string getOfferPaymentMethods()							The payment methods to be offered to the payer for merchants that have this feature enabled. Depending on the merchant configuration a subset of the requested methods might be available. If no payments methods are offered then the payment request cannot be paid. This is detected upon payment request creation and an error is returned instead.
  */
 class MerchantCustomizationOptions extends DataObject {
-	const PAYMENT_METHOD_SWISH = 'SWISH';
-	const PAYMENT_METHOD_BANKTRANSFER = 'BANK_TRANSFER';
-	const PAYMENT_METHOD_PAYLATER = 'PAY_LATER';
-	const PAYMENT_METHOD_INSTALLMENTS = 'INSTALLMENTS';
-	const PAYMENT_METHOD_INSTANT_DIRECT_DEBIT = 'INSTANT_DIRECT_DEBIT';
-	const PAYMENT_METHOD_B2B_R2P = 'B2B_R2P';
-	const PAYMENT_METHOD_MONTHLY_INVOICE = 'MONTHLY_INVOICE';
+	CONST PAYMENT_METHOD_SWISH = 'SWISH';
+	CONST PAYMENT_METHOD_BANKTRANSFER = 'BANK_TRANSFER';
+	CONST PAYMENT_METHOD_PAYLATER = 'PAY_LATER';
+	CONST PAYMENT_METHOD_INSTALLMENTS = 'INSTALLMENTS';
+	CONST PAYMENT_METHOD_INSTALLMENTS_STATIC_AMOUNT = 'INSTALLMENTS_STATIC_AMOUNT';
+	CONST PAYMENT_METHOD_INSTANT_DIRECT_DEBIT = 'INSTANT_DIRECT_DEBIT';
+	CONST PAYMENT_METHOD_B2B_R2P = 'B2B_R2P';
+	CONST PAYMENT_METHOD_B2B_PAY_LATER = 'B2B_PAY_LATER';
+	CONST PAYMENT_METHOD_B2B_INSTALLMENT = 'B2B_INSTALLMENT';
+	CONST PAYMENT_METHOD_PAY_IN_ADVANCE = 'PAY_IN_ADVANCE';
+	CONST PAYMENT_METHOD_VIPPS = 'VIPPS';
 
 	const PAYMENT_METHODS = [
 		self::PAYMENT_METHOD_SWISH,
 		self::PAYMENT_METHOD_BANKTRANSFER,
 		self::PAYMENT_METHOD_PAYLATER,
 		self::PAYMENT_METHOD_INSTALLMENTS,
+		self::PAYMENT_METHOD_INSTALLMENTS_STATIC_AMOUNT,
 		self::PAYMENT_METHOD_INSTANT_DIRECT_DEBIT,
 		self::PAYMENT_METHOD_B2B_R2P,
-	        self::PAYMENT_METHOD_MONTHLY_INVOICE
+		self::PAYMENT_METHOD_B2B_PAY_LATER,
+		self::PAYMENT_METHOD_B2B_INSTALLMENT,
+		self::PAYMENT_METHOD_PAY_IN_ADVANCE,
+		self::PAYMENT_METHOD_VIPPS
 	];
 
 	const CAPTURE_METHOD_IMMEDIATE = 'immediate';
@@ -84,7 +92,7 @@ class MerchantCustomizationOptions extends DataObject {
 	 * @param array $paymentMethods One of `MerchantCustomizationOptions::PAYMENT_METHODS`
 	 */
 	public function setOfferPaymentMethods(array $paymentMethods): self {
-		$paymentMethods = array_unique($paymentMethods);	
+		$paymentMethods = array_unique($paymentMethods);
 		$diff = array_diff($paymentMethods, self::PAYMENT_METHODS);
 
 		if (!empty($diff)) {
