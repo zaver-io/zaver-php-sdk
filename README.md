@@ -24,6 +24,8 @@ All classes and methods are properly type-hinted with complementary PHPDoc - ple
     - [Receive payment callback](#receive-payment-callback)
     - [Do a refund](#do-a-refund)
     - [Receive refund callback (e.g. after refund approval)](#receive-refund-callback-eg-after-refund-approval)
+    - [Identify your integration](#identify-your-integration)
+    - [Handle API errors](#handle-api-errors)
 
 ### Initialize payment
 ```php
@@ -159,4 +161,37 @@ $refund = $api->receiveCallback(CALLBACK_TOKEN);
 
 echo $refund->getStatus();
 // Output: PENDING_EXECUTION
+```
+
+### Identify your integration
+Every request carries a `User-Agent` header with the SDK and PHP versions. Add your platform and plugin
+so Zaver can see which versions a merchant runs when you ask for support:
+```php
+use Zaver\SDK\Checkout;
+use Zaver\SDK\Utils\UserAgent;
+
+$userAgent = UserAgent::create()
+    ->addProduct('Shopware', '6.6.10.6')
+    ->addProduct('zaver-shopware6-plugin', '1.0.11');
+
+$api = new Checkout(API_KEY, IS_TEST_ENVIRONMENT, CALLBACK_TOKEN, 15, $userAgent);
+// User-Agent: zaver-php-sdk/3.1.0 Shopware/6.6.10.6 zaver-shopware6-plugin/1.0.11 PHP/8.3.12
+```
+The same parameter exists on `Refund` and `Manage`. Without it, the header is `zaver-php-sdk/<version> PHP/<version>`.
+
+### Handle API errors
+All API and transport failures throw `Zaver\SDK\Utils\Error`:
+```php
+use Zaver\SDK\Utils\Error;
+
+try {
+    $payment = $api->createPayment($request);
+}
+catch(Error $e) {
+    $e->getErrorMessage();     // first error message reported by Zaver, or a generic message
+    $e->getErrorCode();        // Zaver error code, e.g. INVALID_AMOUNT (null if none)
+    $e->getHttpStatus();       // HTTP status of the response, null if no response was received
+    $e->getResponseHeaders();  // lower-cased response headers; include x-amz-cf-id when contacting Zaver
+    $e->getResponseBody();     // decoded response body, if any
+}
 ```

@@ -10,6 +10,8 @@ class Error extends Exception {
 	protected $requestBody = null;
 	protected $responseBody = null;
 	protected $errors = [];
+	protected $httpStatus = null;
+	protected $responseHeaders = [];
 
 	/**
 	 * @param string|array $errorMessage
@@ -68,6 +70,38 @@ class Error extends Exception {
 	 */
 	public function setResponseBody(?array $responseBody): void {
 		$this->responseBody = $responseBody;
+	}
+
+	/**
+	 * HTTP status of the Zaver API response, or null if the error happened before a response was received.
+	 */
+	public function getHttpStatus(): ?int {
+		return $this->httpStatus;
+	}
+
+	public function setHttpStatus(?int $httpStatus): void {
+		$this->httpStatus = $httpStatus;
+	}
+
+	/**
+	 * Headers of the Zaver API response, lower-cased names. Useful when reporting a problem to Zaver:
+	 * the API currently returns no request id of its own, but CloudFront's `x-amz-cf-id` identifies the request.
+	 * @return array<string, string>
+	 */
+	public function getResponseHeaders(): array {
+		return $this->responseHeaders;
+	}
+
+	/** @param array<string, string> $responseHeaders */
+	public function setResponseHeaders(array $responseHeaders): void {
+		$this->responseHeaders = $responseHeaders;
+	}
+
+	/**
+	 * Zaver's error code (e.g. `INVALID_AMOUNT`), if the API reported one.
+	 */
+	public function getErrorCode(): ?string {
+		return $this->errorCode;
 	}
 
 	/**
