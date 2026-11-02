@@ -5,6 +5,11 @@ use DateTime;
 
 /**
  * Contains the current status of the payment. Returned by way of callback, or by calling the `GET` endpoint.
+ *
+ * @method ?string getPaymentMethod()         The payment method the payer chose (e.g. `PAY_LATER`); `null` until a method has been chosen.
+ * @method ?string getPaymentMethodVariant()  The variant of the chosen payment method (e.g. `30_DAYS`), when the merchant has several variants of it.
+ * @method ?string getMarket()                The ISO 3166-1 country code of the payment's market.
+ * @method ?string getCurrency()              The ISO currency code of the payment.
  */
 class PaymentStatusResponse extends DataObject {
 

@@ -10,7 +10,8 @@ use Zaver\SDK\Utils\Error;
  * 
  * @method string getCheckoutToken()	The token used to start the in-page checkout, directly in the specific payment method flow.
  * @method string getPaymentLink()		A link to the Zaver checkout, leading directly to the specific payment method flow.
- * @method string getPaymentMethod()	Specific payment method for this paymentLink/checkoutToken.
+ * @method string getPaymentMethod()			Specific payment method for this paymentLink/checkoutToken.
+ * @method ?string getPaymentMethodVariant()	Optional variant of the payment method (e.g. `30_DAYS` for `PAY_LATER`), when the merchant has several variants of it.
  */
 class SpecificPaymentMethodData extends DataObject {
 	/**
@@ -27,6 +28,15 @@ class SpecificPaymentMethodData extends DataObject {
 	 */
 	public function setPaymentLink(string $paymentLink): self {
 		$this->data['paymentLink'] = $paymentLink;
+
+		return $this;
+	}
+
+	/**
+	 * Optional variant of the payment method, e.g. `30_DAYS` for `PAY_LATER`.
+	 */
+	public function setPaymentMethodVariant(string $paymentMethodVariant): self {
+		$this->data['paymentMethodVariant'] = $paymentMethodVariant;
 
 		return $this;
 	}

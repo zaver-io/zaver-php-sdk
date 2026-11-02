@@ -163,6 +163,28 @@ echo $refund->getStatus();
 // Output: PENDING_EXECUTION
 ```
 
+### List the available payment methods
+`getPaymentMethods()` returns the methods Zaver offers the merchant for a market, optionally narrowed down by
+amount and currency. Merchants with several variants of a method (for example `PAY_LATER` in 14, 30 or 90
+days) get one entry per variant, identified by `paymentMethodVariant`; other merchants get one entry per
+method without a variant:
+```php
+use Zaver\SDK\Object\PaymentMethodsRequest;
+
+$request = PaymentMethodsRequest::create()
+    ->setMarket('SE')
+    ->setAmount(1500)
+    ->setCurrency('SEK');
+
+foreach($api->getPaymentMethods($request)->getPaymentMethods() as $method) {
+    echo $method->getPaymentMethod();         // PAY_LATER
+    echo $method->getPaymentMethodVariant();  // 30_DAYS, or null when the merchant has no variants
+    echo $method->getTitle();
+}
+```
+`getPaymentMethod()` and `getPaymentMethodVariant()` on a `PaymentStatusResponse` tell which method (and
+variant) the payer chose; both are `null` until the payer has made a choice.
+
 ### Identify your integration
 Every request carries a `User-Agent` header with the SDK and PHP versions. Add your platform and plugin
 so Zaver can see which versions a merchant runs when you ask for support:

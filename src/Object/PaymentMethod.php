@@ -5,7 +5,8 @@ use Zaver\SDK\Utils\DataObject;
 /**
  * PaymentMethod as found in `PaymentMethodsResponse`
  * 
- * @method string         getPaymentMethod()    The Payment Method identifier.
+ * @method string         getPaymentMethod()         The Payment Method identifier.
+ * @method ?string        getPaymentMethodVariant()  Optional variant of the payment method, e.g. `14_DAYS`, `30_DAYS` or `90_DAYS` for `PAY_LATER`. Only present for merchants with several variants of a payment method; each variant is listed as its own entry.
  * @method string         getTitle()            The title of the payment method for display purposes.
  * @method string         getDescription()      A short text that describes the payment method.
  * @method string         getIconSvgSrc()       A URL to an SVG icon for the payment method.
