@@ -10,6 +10,7 @@ use DateTime;
  * @method ?string getPaymentMethodVariant()  The variant of the chosen payment method (e.g. `30_DAYS`), when the merchant has several variants of it.
  * @method ?string getMarket()                The ISO 3166-1 country code of the payment's market.
  * @method ?string getCurrency()              The ISO currency code of the payment.
+ * @method ?array  getCaptures()              Captures made on the payment, each an array with `id`, `timestamp`, `totalAmount` and `lineItemEvents`; `null` before the first capture.
  */
 class PaymentStatusResponse extends DataObject {
 
