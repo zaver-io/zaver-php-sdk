@@ -153,7 +153,7 @@ class PaymentStatusResponse extends DataObject {
 	 * @return string
 	 */
 	public function getIdempotencyKey(): string {
-		return $this->data['idempotencyKey'] ?? '';
+		return $this->data['paymentIdempotencyKey'] ?? $this->data['idempotencyKey'] ?? '';
 	}
 
 	/**

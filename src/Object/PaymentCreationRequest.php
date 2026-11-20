@@ -138,10 +138,11 @@ class PaymentCreationRequest extends DataObject {
 	}
 
 	/**
-	 * Add a payment idempotency key.
+	 * Add a payment idempotency key (a UUID). A repeated creation with the same key returns the first payment
+	 * instead of creating a second one.
 	 */
 	public function setIdempotencyKey( string $idempotencyKey ): self {
-		$this->data['idempotencyKey'] = $idempotencyKey;
+		$this->data['paymentIdempotencyKey'] = $idempotencyKey;
 
 		return $this;
 	}

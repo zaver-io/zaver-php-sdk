@@ -3,6 +3,8 @@
 namespace Zaver\SDK;
 
 use Zaver\SDK\Config\Endpoint;
+use Zaver\SDK\Object\CreditPricingRequest;
+use Zaver\SDK\Object\CreditPricingResponse;
 use Zaver\SDK\Object\PaymentCreationRequest;
 use Zaver\SDK\Object\PaymentUpdateRequest;
 use Zaver\SDK\Object\PaymentStatusResponse;
@@ -57,6 +59,18 @@ class Checkout extends Base {
 		$response = $this->client->get("/payments/link/v2/paymentmethods/$query");
 
 		return new PaymentMethodsResponse($response);
+	}
+
+	/**
+	 * The consumer credit options a shop may show for an amount before any payment exists: single invoices, with the
+	 * payment plan their unpaid balance converts to, installments and monthly invoices, each with the representative
+	 * example in the requested language. Use it for "from X per month" badges and loan calculators. The answer may
+	 * be cached per amount for the time in the API's Cache-Control header (an hour).
+	 */
+	public function getCreditPricing(CreditPricingRequest $request): CreditPricingResponse {
+		$response = $this->client->post('/payments/link/v2/credit-pricing', $request);
+
+		return new CreditPricingResponse($response);
 	}
 
 	public function updatePayment(string $paymentId, PaymentUpdateRequest $request): PaymentStatusResponse {

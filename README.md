@@ -180,10 +180,56 @@ foreach($api->getPaymentMethods($request)->getPaymentMethods() as $method) {
     echo $method->getPaymentMethod();         // PAY_LATER
     echo $method->getPaymentMethodVariant();  // 30_DAYS, or null when the merchant has no variants
     echo $method->getTitle();
+    // Consumer credit methods listed for an amount carry the texts to show under the method:
+    echo $method->getCreditWarningHtml();     // the market's credit warning, HTML; null where none is required
+    echo $method->getRepresentativeExample(); // the representative example of the cheapest option for the amount
 }
 ```
+Show a credit method as its title and description, a divider, the credit warning and the representative example.
 `getPaymentMethod()` and `getPaymentMethodVariant()` on a `PaymentStatusResponse` tell which method (and
 variant) the payer chose; both are `null` until the payer has made a choice.
+
+### Price an amount (credit pricing)
+`getCreditPricing()` tells which consumer credit options you may show for an amount before any payment exists:
+single invoices (`PAY_LATER`, with the payment plan the unpaid balance converts to on the due date), installments
+and monthly invoices, each with the representative example in the requested language. Shops use it for
+"from X per month" badges and loan calculators on product pages:
+```php
+use Zaver\SDK\Config\Language;
+use Zaver\SDK\Config\PaymentMethod;
+use Zaver\SDK\Object\CreditPricingRequest;
+
+$request = CreditPricingRequest::create()
+    ->setAmount(5000)
+    ->setCurrency('SEK')
+    ->setMarket('SE')
+    ->setPaymentMethod(PaymentMethod::INSTALLMENTS)   // optional; every consumer credit method when omitted
+    ->setLanguage(Language::SV_SE);                   // optional; the market's language when omitted
+
+$pricing = $api->getCreditPricing($request);
+
+echo $pricing->getLowestMonthlyAmount();              // 237.33, or null when nothing is paid monthly
+foreach ($pricing->getOptions() as $option) {         // invoices first, then the terms shortest first
+    echo $option->getPaymentMethod();                 // PAY_LATER, INSTALLMENTS, INSTALLMENTS_STATIC_AMOUNT or MONTHLY_INVOICE
+    echo $option->getDueInDays();                     // 30 for an invoice, null otherwise
+    echo $option->getNumberOfInstallments();          // 24 for a payment plan, null for an invoice
+    echo $option->getMonthlyAmount(), $option->getTotalAmount();
+    echo $option->getEffectiveAnnualInterestRatePercent();   // "11.63%", for display
+    echo $option->getEffectiveAnnualInterestRateFraction();  // 0.1163, for calculation
+    echo $option->getRepresentativeExample();         // plain text in the requested language
+    echo $option->getRepresentativeExample('en-GB');
+    foreach ($option->getPaymentPlanConversionOptions() as $plan) {   // an invoice's payment plan, longest term
+        echo $plan->getNumberOfInstallments(), $plan->getMonthlyAmount();
+    }
+}
+echo $pricing->getCreditWarningHtml();                // the warning the market requires next to credit offers, as HTML; null in Norway
+echo $pricing->getSuggestedCopy();                    // a short general conditions text
+echo $pricing->getTermsLinkText(), $pricing->getTermsUrl();
+echo $pricing->getSecciLinkText(), $pricing->getSecciUrl();  // the market's SECCI document
+echo $pricing->getZaverAsset('logoSvg');
+```
+`getPayLaterOptions()` and `getInstallmentOptions()` filter the options by method. An empty `getOptions()` means
+Zaver offers no credit for the amount, for instance below the merchant's minimum; it is not an error.
 
 ### Identify your integration
 Every request carries a `User-Agent` header with the SDK and PHP versions. Add your platform and plugin
