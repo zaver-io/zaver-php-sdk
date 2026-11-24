@@ -66,9 +66,14 @@ class Checkout extends Base {
 	 * payment plan their unpaid balance converts to, installments and monthly invoices, each with the representative
 	 * example in the requested language. Use it for "from X per month" badges and loan calculators. The answer may
 	 * be cached per amount for the time in the API's Cache-Control header (an hour).
+	 *
+	 * Sent as GET /payments/link/v2/credit-pricing with the request as query parameters, the form the API documents.
 	 */
 	public function getCreditPricing(CreditPricingRequest $request): CreditPricingResponse {
-		$response = $this->client->post('/payments/link/v2/credit-pricing', $request);
+		$data = $request->jsonSerialize();
+		$query = !empty($data) ? '?' . http_build_query($data) : '';
+
+		$response = $this->client->get("/payments/link/v2/credit-pricing$query");
 
 		return new CreditPricingResponse($response);
 	}

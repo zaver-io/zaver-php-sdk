@@ -222,7 +222,7 @@ foreach ($pricing->getOptions() as $option) {         // invoices first, then th
         echo $plan->getNumberOfInstallments(), $plan->getMonthlyAmount();
     }
 }
-echo $pricing->getCreditWarningHtml();                // the warning the market requires next to credit offers, as HTML; null in Norway
+echo $pricing->getCreditWarningHtml();                // the warning the market requires next to credit offers, as HTML; null where none is required
 echo $pricing->getSuggestedCopy();                    // a short general conditions text
 echo $pricing->getTermsLinkText(), $pricing->getTermsUrl();
 echo $pricing->getSecciLinkText(), $pricing->getSecciUrl();  // the market's SECCI document

@@ -118,8 +118,9 @@ class CreditPricingResponse extends DataObject {
 	/**
 	 * The warning the market requires next to every credit offer, as an HTML fragment: a `<strong>` heading, a short
 	 * text and, where the market prescribes one, an `<img>` (inline SVG or a cdn.zaver.com link). Only `strong`, `br`
-	 * and `img` are used. Print it unescaped wherever an option is shown. Sweden and the Netherlands have a prescribed
-	 * wording in their own language, the same in both texts. Null for markets without a warning (Norway).
+	 * and `img` are used. Print it unescaped wherever an option is shown. Each market has its own wording: `local` is
+	 * the market's language when that is the language of the response and otherwise English, `en-GB` the market's
+	 * English. Null for markets without a warning.
 	 *
 	 * @param string $language `local` for the language of the response, or `en-GB`
 	 */
